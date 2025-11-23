@@ -54,16 +54,16 @@ module "eks_node" {
     vpc_id = local.vpc_id
 }
 
-# module "cicd-tools" {
-#     #source = "../../terraform-aws-securitygroup"
-#     source = "git::https://github.com/siri-123706/terraform-aws-securitygroup.git?ref=main"
-#     project = var.project
-#     environment = var.environment
+module "cicd-tools" {
+    #source = "../../terraform-aws-securitygroup"
+    source = "git::https://github.com/siri-123706/terraform-aws-securitygroup.git?ref=main"
+    project = var.project
+    environment = var.environment
 
-#     sg_name = var.bastion_sg_name
-#     sg_description = var.bastion_sg_description
-#     vpc_id = local.vpc_id
-# }
+    sg_name = var.bastion_sg_name
+    sg_description = var.bastion_sg_description
+    vpc_id = local.vpc_id
+}
 
 
 resource "aws_security_group_rule" "ingress_alb_https" {
@@ -134,7 +134,7 @@ resource "aws_security_group_rule" "eks_node_eks_control_plane" {
   type              = "ingress"
   from_port        = 0
   to_port          = 0
-  protocol         = "-1"
+  protocol         = "-1" #all traffic from internet 
   source_security_group_id = module.eks_control_plane.sg_id
   security_group_id = module.eks_node.sg_id
 }
@@ -152,7 +152,7 @@ resource "aws_security_group_rule" "eks_node_bastion" {
   type              = "ingress"
   from_port        = 22
   to_port          = 22
-  protocol         = "tcp"
+  protocol         = "tcp" #spectific traffic allowing
   source_security_group_id = module.bastion.sg_id
   security_group_id = module.eks_node.sg_id
 }
@@ -162,6 +162,6 @@ resource "aws_security_group_rule" "eks_node_vpc" {
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks = ["10.0.0.0/16"]
+  cidr_blocks = ["10.0.0.0/16"] # pod to pod communication so we allow the cidr block of vpc or subnet cidr
   security_group_id = module.eks_node.sg_id
 }

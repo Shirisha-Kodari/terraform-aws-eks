@@ -29,3 +29,8 @@ resource "aws_ssm_parameter" "vpn_sg_id" {
   value = module.vpn.sg_id
 }
 
+resource "aws_ssm_parameter" "cicd_tools_sg_id" {
+  name  = "/${var.project}/${var.environment}/cicd_tools"
+  type  = "String"
+  value = module.cicd_tools
+}

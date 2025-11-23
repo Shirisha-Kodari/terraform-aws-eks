@@ -6,7 +6,7 @@ module "eks" {
   kubernetes_version = "1.32"
 
   addons = {
-    coredns                = {}
+    coredns                = {} # marks a node as unschedule /no schedule new pods 
     eks-pod-identity-agent = { #Enables IAM roles for service accounts (IRSA) via Pod Identity (newer)
       before_compute = true
     }
@@ -18,16 +18,16 @@ module "eks" {
   }
 
   # Optional
-  endpoint_public_access = false
+  endpoint_public_access = false #nodes keeps in private subnet so we give false
 
   # Optional: Adds the current caller identity as an administrator via cluster access entry
-  enable_cluster_creator_admin_permissions = true
+  enable_cluster_creator_admin_permissions = true #who are created cluster to get eks adminstrtr access
 
   vpc_id                   = local.vpc_id
   subnet_ids               = local.private_subnet_ids
   control_plane_subnet_ids = local.private_subnet_ids
 
-  create_node_security_group = false 
+  create_node_security_group = false #eks automatically created sgs so we give false
   create_security_group = false
   security_group_id = local.eks_control_plane_sg_id
   node_security_group_id = local.eks_node_sg_id
