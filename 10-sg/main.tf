@@ -54,16 +54,16 @@ module "eks_node" {
     vpc_id = local.vpc_id
 }
 
-module "cicd-tools" {
-    #source = "../../terraform-aws-securitygroup"
-    source = "git::https://github.com/siri-123706/terraform-aws-securitygroup.git?ref=main"
-    project = var.project
-    environment = var.environment
+# module "cicd-tools" {
+#     #source = "../../terraform-aws-securitygroup"
+#     source = "git::https://github.com/siri-123706/terraform-aws-securitygroup.git?ref=main"
+#     project = var.project
+#     environment = var.environment
 
-    sg_name = var.bastion_sg_name
-    sg_description = var.bastion_sg_description
-    vpc_id = local.vpc_id
-}
+#     sg_name = var.cicd_sg_name
+#     sg_description = var.cicd_sg_description
+#     vpc_id = local.vpc_id
+# }
 
 
 resource "aws_security_group_rule" "ingress_alb_https" {
